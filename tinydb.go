@@ -15,11 +15,23 @@ type Table struct {
 }
 
 func OpenDB(path string) (*Database, error) {
+	db := new(Database)
+
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		_, err = os.Create(path)
+
+		if err != nil {
+			return nil, err
+		}
+		return db, nil
+	}
 	b, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}
-	db := new(Database)
+	if len(b) == 0 {
+		return db, nil
+	}
 	if err = json.Unmarshal(b, db); err != nil {
 		return nil, err
 	}
