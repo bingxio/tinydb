@@ -54,3 +54,16 @@ func TestTinyDB(t *testing.T) {
 	}
 	file.Close()
 }
+
+func TestOpenDB(t *testing.T) {
+	db, err := OpenDB("test.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	fmt.Printf("len(db.Table): %v\n", len(db.Table))
+
+	result := db.Query("user", nil)
+	for _, v := range result {
+		fmt.Println(v)
+	}
+}

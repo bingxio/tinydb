@@ -14,6 +14,18 @@ type Table struct {
 	Rows []any  `json:"rows"`
 }
 
+func OpenDB(path string) (*Database, error) {
+	b, err := os.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+	db := new(Database)
+	if err = json.Unmarshal(b, db); err != nil {
+		return nil, err
+	}
+	return db, nil
+}
+
 func (db *Database) table(name string) *Table {
 	i := 0
 	for i != len(db.Table) {
